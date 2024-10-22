@@ -30,7 +30,7 @@ Copy-Item -Force -Path $FilesToInclude -Destination "$ZipOutDir"
 if (!$NoArchive)
 {
     if ($UMM) {
-        $FILE_NAME = "$DistDir/${modId}_v$modVersion.zip"
+        $FILE_NAME = "$DistDir/${modId}_v$modVersion-UMM.zip"
     } else {
         $FILE_NAME = "$DistDir/${modId}_v$modVersion-BepInEx.zip"
     }

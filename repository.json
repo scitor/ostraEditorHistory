@@ -2,6 +2,11 @@
   "Releases": [
     {
       "Id": "EditorHistory",
+      "Version": "1.1.1",
+      "DownloadUrl": "https://github.com/scitor/ostraEditorHistory/releases/download/v1.1.1/EditorHistory_v1.1.1.zip"
+    },
+    {
+      "Id": "EditorHistory",
       "Version": "1.1.0",
       "DownloadUrl": "https://github.com/scitor/ostraEditorHistory/releases/download/v1.1/EditorHistory_v1.1.0.zip"
     },

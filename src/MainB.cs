@@ -11,7 +11,7 @@ namespace EditorHistory
     {
         public const string pluginGuid = "space.scitor.Ostranauts.EditorHistory";
         public const string pluginName = "EditorHistory";
-        public const string pluginVersion = "1.1.0";
+        public const string pluginVersion = "1.1.1";
 
         ConfigEntry<int> historyEntries = null!;
 

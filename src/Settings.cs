@@ -15,6 +15,7 @@ public class Settings : UnityModManager.ModSettings, IDrawable
 
     public void OnChange()
     {
+        Patch.historyEntries = historyEntries;
     }
 }
 #endif
