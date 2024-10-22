@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿#if UMM
+using HarmonyLib;
 using System.Reflection;
 using UnityModManagerNet;
 
@@ -39,3 +40,4 @@ public static class Main
         return true;
     }
 }
+#endif

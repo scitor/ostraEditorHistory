@@ -1,4 +1,5 @@
-﻿using UnityModManagerNet;
+﻿#if UMM
+using UnityModManagerNet;
 
 namespace EditorHistory;
 
@@ -16,3 +17,4 @@ public class Settings : UnityModManager.ModSettings, IDrawable
     {
     }
 }
+#endif

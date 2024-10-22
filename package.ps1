@@ -1,10 +1,15 @@
 param (
     [switch]$NoArchive,
+    [switch]$UMM,
     [string]$OutputDirectory = $PSScriptRoot
 )
 
 Set-Location "$PSScriptRoot"
-$FilesToInclude = "Info.json","build/*","LICENSE"
+if ($UMM) {
+    $FilesToInclude = "build/UMM/*","LICENSE","Info.json"
+} else {
+    $FilesToInclude = "build/BepInEx/*","LICENSE"
+}
 
 $modInfo = Get-Content -Raw -Path "Info.json" | ConvertFrom-Json
 $modId = $modInfo.Id
@@ -15,6 +20,7 @@ if ($NoArchive) {
     $ZipWorkDir = "$OutputDirectory"
 } else {
     $ZipWorkDir = "$DistDir/tmp"
+    Remove-Item "$ZipWorkDir" -Force -Recurse
 }
 $ZipOutDir = "$ZipWorkDir/$modId"
 
@@ -23,6 +29,10 @@ Copy-Item -Force -Path $FilesToInclude -Destination "$ZipOutDir"
 
 if (!$NoArchive)
 {
-    $FILE_NAME = "$DistDir/${modId}_v$modVersion.zip"
+    if ($UMM) {
+        $FILE_NAME = "$DistDir/${modId}_v$modVersion.zip"
+    } else {
+        $FILE_NAME = "$DistDir/${modId}_v$modVersion-BepInEx.zip"
+    }
     Compress-Archive -Update -CompressionLevel Fastest -Path "$ZipOutDir/*" -DestinationPath "$FILE_NAME"
 }

@@ -4,38 +4,77 @@
     <TargetFramework>net35</TargetFramework>
     <AssemblyName>EditorHistory</AssemblyName>
     <Description>Lists recently used items in the left editor list</Description>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RootNamespace>EditorHistory</RootNamespace>
-    <ReferencePath>e:\Steam\SteamApps\common\Ostranauts\Ostranauts_Data\Managed</ReferencePath>
+    <BasePath>E:\Steam\SteamApps\common\Ostranauts</BasePath>
+    <ReferencePath>$(BasePath)\Ostranauts_Data\Managed</ReferencePath>
+    <Configurations>Debug;Release;UMM;BepInEx</Configurations>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <AssemblySearchPaths>
        $(AssemblySearchPaths);
        $(ReferencePath);
     </AssemblySearchPaths>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(ConfigurationName)' == 'UMM'">
+    <DefineConstants>UMM</DefineConstants>
+    <OutputPath>$(OutputPath)\UMM\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(ConfigurationName)' == 'BepInEx'">
+    <OutputPath>$(OutputPath)\BepInEx\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UMM|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BepInEx|AnyCPU'">
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp" />
     <Reference Include="UnityEngine.UI" />
     <Reference Include="UnityEngine" />
+  </ItemGroup>
 
-    <PackageReference Include="UnityModManager" Version="0.27.2" />
+  <ItemGroup Condition="'$(ConfigurationName)' == 'UMM'">
+    <Reference Include="UnityModManager">
+      <HintPath>$(ReferencePath)\UnityModManager\UnityModManager.dll</HintPath>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(ReferencePath)\UnityModManager\0Harmony.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ConfigurationName)' == 'BepInEx'">
+    <Reference Include="BepInEx">
+      <HintPath>$(BasePath)\BepInEx\core\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx.Harmony">
+      <HintPath>$(BasePath)\BepInEx\core\BepInEx.Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(BasePath)\BepInEx\core\0Harmony.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!-- Copy to build folder -->
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="build/" />
+    <Copy Condition="'$(ConfigurationName)' == 'UMM'" SourceFiles="$(TargetPath)" DestinationFolder="build/UMM/" />
+    <Copy Condition="'$(ConfigurationName)' == 'BepInEx'" SourceFiles="$(TargetPath)" DestinationFolder="build/BepInEx/" />
 
     <!-- Package after Release build -->
-    <Exec Condition="'$(ConfigurationName)' == 'Release' And '$(OS)' == 'Windows_NT'" Command="powershell -executionpolicy bypass -Command &quot;(./package.ps1)&quot;" />
-    <Exec Condition="'$(ConfigurationName)' == 'Release' And '$(OS)' != 'Windows_NT'" Command="pwsh  -Command &quot;(./package.ps1)&quot;" />
+	<Exec Condition="'$(ConfigurationName)' == 'UMM'" Command="powershell -executionpolicy bypass -Command &quot;(./package.ps1 -UMM)&quot;" />
+	<Exec Condition="'$(ConfigurationName)' == 'BepInEx'" Command="powershell -executionpolicy bypass -Command &quot;(./package.ps1)&quot;" />
   </Target>
 </Project>

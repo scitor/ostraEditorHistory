@@ -13,6 +13,8 @@ class Patch
 
     static List<string> HistoryEntryList = new List<string>();
     static string LastFilterString = Blank;
+    
+    public static int historyEntries = 10;
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(CrewSim), nameof(CrewSim.PopulatePartList))]
@@ -25,15 +27,16 @@ class Patch
         if (!Blank.Equals(strCT)) {
             return true;
         }
+        MethodInfo reflPartListBtn = __instance.GetType().GetMethod("PartListBtn", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (reflPartListBtn == null) {
+            return true;
+        }
         foreach (Component component in ___pnlPartsContent.transform) {
             Object.Destroy(component.gameObject);
         }
         foreach (string histEntry in HistoryEntryList) {
             CondOwner condOwner = DataHandler.GetCondOwner(histEntry);
-            __instance.GetType()
-                .GetMethod("PartListBtn", BindingFlags.NonPublic | BindingFlags.Instance)?
-                .Invoke(__instance, new object[] { condOwner, ___pnlPartsContent });
-
+            reflPartListBtn.Invoke(__instance, new object[] { condOwner, ___pnlPartsContent });
             condOwner.Destroy();
         }
         return false;
@@ -47,7 +50,7 @@ class Patch
             return;
 
         HistoryEntryList.Insert(0, strName);
-        HistoryEntryList = HistoryEntryList.Distinct().Take(Main.Settings.historyEntries).ToList();
+        HistoryEntryList = HistoryEntryList.Distinct().Take(historyEntries).ToList();
         if (Blank.Equals(LastFilterString)) {
             __instance.PopulatePartList(Blank);
         }
