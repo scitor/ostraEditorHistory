@@ -11,7 +11,7 @@ namespace EditorHistory
     {
         public const string pluginGuid = "space.scitor.Ostranauts.EditorHistory";
         public const string pluginName = "EditorHistory";
-        public const string pluginVersion = "1.1.1";
+        public const string pluginVersion = "1.1.2";
 
         ConfigEntry<int> historyEntries = null!;
 
@@ -19,6 +19,7 @@ namespace EditorHistory
         {
             historyEntries = Config.Bind("General", "historyEntries", 10, "History entries (10 default)");
             historyEntries.SettingChanged += OnSettingChanged;
+            Patch.historyEntries = historyEntries.Value;
 
             Harmony harmony = new Harmony(pluginGuid);
             harmony.PatchAll(typeof(Patch).Assembly);

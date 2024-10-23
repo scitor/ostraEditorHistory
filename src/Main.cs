@@ -13,6 +13,8 @@ public static class Main
     private static bool Load(UnityModManager.ModEntry modEntry)
     {
         Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
+        Patch.historyEntries = Settings.historyEntries;
+
         modEntry.OnGUI = OnDrawGUI;
         modEntry.OnSaveGUI = OnSaveGUI;
         modEntry.OnToggle = OnToggle;

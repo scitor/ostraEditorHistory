@@ -4,7 +4,7 @@
     <TargetFramework>net35</TargetFramework>
     <AssemblyName>EditorHistory</AssemblyName>
     <Description>Lists recently used items in the left editor list</Description>
-    <Version>1.1.0</Version>
+    <Version>1.1.2</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RootNamespace>EditorHistory</RootNamespace>
